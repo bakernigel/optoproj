@@ -8,9 +8,9 @@
     
   ],
   "config_flow": true,
-  "documentation": "https://github.com/ldotlopez/ha-historical-sensor",
+  "documentation": "https://github.com/bakernigel/optoproj",
   "iot_class": "cloud_polling",
-  "issue_tracker": "https://github.com/ldotlopez/ha-historical-sensor/issues",
+  "issue_tracker": "https://github.com/bakernigel/optoproj/issues",
   "requirements": [
     
   ],
