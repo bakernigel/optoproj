@@ -15,4 +15,4 @@ __A Home Assistant custom Integration for Optoma Projector.__
 - Provides a basic on and off remote capability for Optoma Projector using the OptomaConnect API
 - Will only work with projectors that have the Smart Home capability (Alexa or Google Home control)
 - Only tested with Optoma UHZ50
-- You must register for an Optoma Connect acount and link your projector using the OptomaConnect app
+- You must register for an Optoma Connect account and link your projector using the OptomaConnect app
