@@ -1,37 +1,30 @@
-# GoveeLife Home Assistant Custom Integration
-This custom Home Assistant integration is a work in progress that uses the newly released API 2.0 by Govee. Feel free to contribute, all help is appreciated.
+# smartthings2
+New version of my Smartthings integration using OAuth. Replaces the core Smartthings integration.
 
-## Supported Devices 
-* Lights - Light entity, color selection, dimming
-* Heaters - Climate, power, oscillation
-* Air Purifiers - Fan entity, presets
-* Fans - Fan entity, presets
-* Ice Maker - power switch
-* Aroma Diffuser - power switch
-* Socket - power switch
+<b> Previously installed versions of Smartthings integration must be deleted before installing this integration <b>
 
-## Installing
-You can install this integration with HACS or manually.
-### HACS
-After installing HACS ([click here for instructions](https://hacs.xyz/docs/setup/download/)), open the custom repositories section and paste the URL of this repo in. Then set the category to "integration". Then open the integrations page and add 'goveelife'.
+![logo](https://brands.home-assistant.io/_/smartthings/logo@2x.png)
 
-### Manually
-Copy the custom_components/goveelife to your custom_components folder. Reboot Home Assistant and configure the 'goveelife' integration via the integrations page.
+__A Home Assistant custom Integration for SmartThings.__
 
-### Configuration
-When you add the goveelife integration, you will be prompted for an API key. To get this, you will need to:
-1. Open the 'Govee Home' app on your smartphone
-2. Login or create an account
-3. Open the settings and tap "Apply for an API key"
-4. Check your email to find the API key and use it when adding this integration to your Home Assistant instance.
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?category=integration&repository=smartthings2&owner=bakernigel)
 
-Note: the integration has the option of changing the polling frequence which is how often it will hit the Govee API to check for updates. If you set this value too low, you will be rate limited and you will not be able to control your devices.
+## __Installation Using HACS__
+- Backup your existing HA
+- Delete any existing Smarthings integration
+- Delete any custom Smarthings installations from HACS
+- Restart Home Assistant
+- Download the custom SmartThings integration from the HACS custom repository using the button above
+- Restart Home Assistant
+- Install the Smartthings integration using Settings -> Devices and Services -> Add Integration
+- Configure the Smartthings integration the same as for the core integration. 
+- See https://www.home-assistant.io/integrations/smartthings for full instructions. 
 
-## How can YOU help?
-I need API responses so I can continue to build out this integration. You can provide these resonses by opening an "issue" at the top of this repository. It's pretty simple. Use any online API query tool, and submit a GET requ
-est to "https://openapi.api.govee.com/router/api/v1/user/devices". Make sure you include a single header called "Govee-API-Key" which should contain your API key aquired in your Govee app.
-When you submit the reponse as an issue above, make sure you alter any MAC addresses, and DO NOT incluse your API key in the post!
+## __𝐅𝐞𝐚𝐭𝐮𝐫𝐞𝐬__
+- Added some missing sensors & controls 
+- More capabilities are available than core Smartthings integration
+- Only tested with Samsung Fridge Family Hub Model 24K_REF_LCD_FHUB9.0, Samsung Dishwasher Model DA_DW_TP1_21_COMMON and Samsung Wall Oven Model LCD_S905D3_OV_P_US_23K. <b>May not work with other devices.</b>
+- Integration may add unwanted sensors/controls for your device. Simply disable the unwanted ones in Home Assistant.
+- Integration reports the raw state for sensors from Samsung. Adjust the values using HA templates. e.g Family Hub Power {{(states('sensor.fridge_family_hub_power_meter')) | int /10}}
 
-
-For many folks setting up something like Postman or whatever to do the API call may be overkill... I'm pretty sure all Mac OSX, Linux and Windows 11 come with cURL installed by default...
-curl -H 'Govee-API-Key: YOURKEYHERE' -o 'Govee API response.json' -X GET https://openapi.api.govee.com/router/api/v1/user/devices
+Based on: Core Smartthings 2025.3.4
