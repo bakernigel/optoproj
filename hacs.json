@@ -1,7 +1,5 @@
 {
-    "name": "Goveelife",
-    "domains": ["sensor"],
-    "homeassistant": "2024.3",
-    "render_readme": false,
-    "iot_class": "Cloud"
+  "name": "OptomaProjector",
+  "render_readme": true,
+  "homeassistant": "2025.4.0"
 }
