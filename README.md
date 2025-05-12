@@ -9,7 +9,7 @@ __A Home Assistant custom Integration for Optoma Projector.__
 - Download the custom Optoma integration from the HACS custom repository using the button above
 - Restart Home Assistant
 - Install the Optoma integration using Settings -> Devices and Services -> Add Integration
-- Configure the Optoma integration. 
+- Configure the Optoma integration using your OptomaConnect login and password. 
 
 ## __𝐅𝐞𝐚𝐭𝐮𝐫𝐞𝐬__
 - Provides a basic on and off remote capability for Optoma Projector using the OptomaConnect API
