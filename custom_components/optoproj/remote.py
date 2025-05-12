@@ -25,7 +25,7 @@ async def async_setup_entry(
 ) -> None:
     """Add remotes for a config entry."""
     
-    _LOGGER.warning("Adding remote") 
+    _LOGGER.debug("Adding remote") 
     
     async_add_entities([OptoProjRemoteEntity(config_entry)])
 
@@ -37,7 +37,7 @@ class OptoProjRemoteEntity(RemoteEntity):
     def __init__(self, config_entry: ConfigEntry) -> None:
         """Initialize the entity."""
         
-        _LOGGER.warning("Initialize the OptoProjRemoteEntity entity.")
+        _LOGGER.debug("Initialize the OptoProjRemoteEntity entity.")
         super().__init__()        
             
         entry_data = config_entry.runtime_data    
@@ -57,17 +57,17 @@ class OptoProjRemoteEntity(RemoteEntity):
             model=device_info["device_model"],
         )
         
-        _LOGGER.warning("Initialize the OptoProjRemoteEntity entity done. self._name:%s self._attr_unique_id:%s device_id:%s self._attr_device_info:%s", self._name, self._attr_unique_id, self._device_id, self._attr_device_info )        
+        _LOGGER.debug("Initialize the OptoProjRemoteEntity entity done. self._name:%s self._attr_unique_id:%s device_id:%s self._attr_device_info:%s", self._name, self._attr_unique_id, self._device_id, self._attr_device_info )        
 
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Turn the projector on."""
-        _LOGGER.warning("Send Turn On Command") 
+        _LOGGER.debug("Send Turn On Command") 
 
         await self._api.async_send_turn_on(self._device_id)
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Turn the projector off."""
-        _LOGGER.warning("Send Turn Off Command") 
+        _LOGGER.debug("Send Turn Off Command") 
                 
         await self._api.async_send_turn_off(self._device_id)
 

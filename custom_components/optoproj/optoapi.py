@@ -32,12 +32,12 @@ class OptoApi:
         self.username: str = username
         self.password: str = password
         self.access_token: Optional[str] = None
-        _LOGGER.warning("OptoApi init username:%s password:%s",username,password)
+        _LOGGER.debug("OptoApi init username:%s password:%s",username,password)
 
 
     async def async_login(self) -> None:
         """Login to the utility website."""
-        _LOGGER.warning("Starting login process for Optoma username:%s password:%s",self.username,self.password)
+        _LOGGER.debug("Starting login process for Optoma username:%s password:%s",self.username,self.password)
 
         session = self.session
         payload = {"login_name":self.username,"password":self.password}    
@@ -58,12 +58,12 @@ class OptoApi:
             if login_result["result_code"] != 200:
                raise InvalidAuth("Username and password failed")
 
-        _LOGGER.warning("Optoma Login result: %s",login_result)
+        _LOGGER.debug("Optoma Login result: %s",login_result)
         
         self.access_token = login_result["result"]["token"]
         
     async def async_get_device_list(self):  
-        _LOGGER.warning("async_get_device_list")
+        _LOGGER.debug("async_get_device_list")
         session = self.session    
     
         url = "https://omw.optoma.com/device"
@@ -76,12 +76,12 @@ class OptoApi:
         async with session.get(url, data=None, headers=headers) as resp:
             login_result = await resp.json(content_type=None)
         device_id = login_result["result"][0]["id"] 
-        _LOGGER.warning("async_get_device_list device_id:%s",device_id)
+        _LOGGER.debug("async_get_device_list device_id:%s",device_id)
         device_list = login_result["result"]
         return device_list    
         
     async def async_send_turn_on(self, device_id) -> None:  
-        _LOGGER.warning("async_send_turn_on")
+        _LOGGER.debug("async_send_turn_on")
         session = self.session    
     
         url = "https://omw.optoma.com/device/run_task"
@@ -100,10 +100,10 @@ class OptoApi:
         
         async with session.post(url, json=payload, headers=headers) as resp:
             result = await resp.json(content_type=None)
-        _LOGGER.warning("async_send_turn_on result:%s", result)       
+        _LOGGER.debug("async_send_turn_on result:%s", result)       
             
     async def async_send_turn_off(self, device_id) -> None:  
-        _LOGGER.warning("async_send_turn_off")
+        _LOGGER.debug("async_send_turn_off")
         session = self.session    
     
         url = "https://omw.optoma.com/device/run_task"
@@ -122,7 +122,7 @@ class OptoApi:
         
         async with session.post(url, json=payload, headers=headers) as resp:
             result = await resp.json(content_type=None)
-        _LOGGER.warning("async_send_turn_off result:%s", result)    
+        _LOGGER.debug("async_send_turn_off result:%s", result)    
             
 
 

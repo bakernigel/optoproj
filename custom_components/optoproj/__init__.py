@@ -35,7 +35,7 @@ OptoProjConfigEntry = ConfigEntry[OptoProjData]
 
 async def async_setup_entry(hass: HomeAssistant, entry: OptoProjConfigEntry) -> bool:
     """Set up Optoproj from a config entry."""
-    _LOGGER.warning("Set up Optoproj from a config entry: %s", entry.data)
+    _LOGGER.debug("Set up Optoproj from a config entry: %s", entry.data)
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN].setdefault(entry.entry_id, {})
     entry_data = hass.data[DOMAIN][entry.entry_id]
@@ -54,19 +54,19 @@ async def async_setup_entry(hass: HomeAssistant, entry: OptoProjConfigEntry) -> 
     
     token = api.access_token
     
-    _LOGGER.warning("async_setup_entry token: %s", token)
+    _LOGGER.debug("async_setup_entry token: %s", token)
     
     device_list = await api.async_get_device_list()
     
 #    entry_data[CONF_DEVICES] = device_id
 
     for device in device_list:
-        _LOGGER.warning("async_setup_entry device: %s", device)
+        _LOGGER.debug("async_setup_entry device: %s", device)
         device_id = device["id"]
         conf_data = OptoProjData(device, device_id, api)
         entry.runtime_data = conf_data
         
-        _LOGGER.warning("async_setup_entry device_id: %s", device_id)
+        _LOGGER.debug("async_setup_entry device_id: %s", device_id)
         
         await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
