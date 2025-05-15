@@ -4,8 +4,8 @@
   "config_flow": true,
   "version": "1.0.0",
   "requirements": [],
-  "documentation": "https://github.com/bakernigel/optoproj",
-  "issue_tracker": "https://github.com/bakernigel/optoproj/issues",
+  "documentation": "https://github.com/your-repo",
+  "issue_tracker": "https://github.com/your-repo/issues",
   "iot_class": "cloud_polling",
   "loggers": ["optoproj"]
 }

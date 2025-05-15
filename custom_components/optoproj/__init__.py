@@ -3,17 +3,15 @@
 from __future__ import annotations
 
 import logging
-
 from dataclasses import dataclass
+from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
-from homeassistant.const import (
-    CONF_DEVICES,
-    CONF_PARAMS,
-)
+from homeassistant.const import CONF_USERNAME, CONF_PASSWORD
+from homeassistant.helpers import device_registry as dr
 
 from .const import DOMAIN
 from .optoapi import OptoApi
@@ -25,57 +23,68 @@ PLATFORMS: list[Platform] = [Platform.REMOTE]
 @dataclass
 class OptoProjData:
     """Define an object to hold OptoProjData data."""
-    device_data: dict[str, str]
+    device_data: dict[str, Any]
     device_id: str
     api: OptoApi
 
-
-OptoProjConfigEntry = ConfigEntry[OptoProjData]
-
-
-async def async_setup_entry(hass: HomeAssistant, entry: OptoProjConfigEntry) -> bool:
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Optoproj from a config entry."""
-    _LOGGER.debug("Set up Optoproj from a config entry: %s", entry.data)
+    _LOGGER.debug("Setting up Optoproj config entry: %s", entry.entry_id)
     hass.data.setdefault(DOMAIN, {})
-    hass.data[DOMAIN].setdefault(entry.entry_id, {})
-    entry_data = hass.data[DOMAIN][entry.entry_id]
-    entry_data[CONF_PARAMS] = entry.data
-    
-    username = entry.data["username"]
-    password = entry.data["password"]
-    
+    hass.data[DOMAIN].setdefault(entry.entry_id, {"devices": {}})
+
+    username = entry.data[CONF_USERNAME]
+    password = entry.data[CONF_PASSWORD]
+
     api = OptoApi(
         async_create_clientsession(hass),
         username,
         password,
     )
-    
-    await api.async_login()
-    
-    token = api.access_token
-    
-    _LOGGER.debug("async_setup_entry token: %s", token)
-    
-    device_list = await api.async_get_device_list()
-    
-#    entry_data[CONF_DEVICES] = device_id
 
-    for device in device_list:
-        _LOGGER.debug("async_setup_entry device: %s", device)
-        device_id = device["id"]
-        conf_data = OptoProjData(device, device_id, api)
-        entry.runtime_data = conf_data
-        
-        _LOGGER.debug("async_setup_entry device_id: %s", device_id)
-        
+    try:
+        await api.async_login()
+        _LOGGER.debug("Login successful, token: %s", api.access_token)
+
+        device_list = await api.async_get_device_list()
+        _LOGGER.debug("Device list: %s", device_list)
+
+        device_registry = dr.async_get(hass)
+        devices = {}
+        for device in device_list:
+            device_id = device["id"]
+            _LOGGER.debug("Processing device: %s", device_id)
+
+            # Store device data
+            devices[device_id] = OptoProjData(
+                device_data=device,
+                device_id=device_id,
+                api=api,
+            )
+# Below doesn't seem to be needed. Device info gets added in remote.py
+            # Register device in Device Registry
+#            device_registry.async_get_or_create(
+#                config_entry_id=entry.entry_id,
+#                identifiers={(DOMAIN, device_id)},
+#                manufacturer="Optoma",
+#                name=device.get("name", device_id),
+#                model=device["device_model"],
+#                configuration_url="https://omw.optoma.com",
+#            )
+
+        # Store all devices in hass.data
+        hass.data[DOMAIN][entry.entry_id]["devices"] = devices
+
+        # Set up the remote platform once
         await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+        return True
 
-    return True
-
+    except Exception as err:
+        _LOGGER.error("Failed to set up Optoproj: %s", err)
+        raise
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
     if unload_ok := await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
-        hass.data[DOMAIN].pop(entry.entry_id)
-
+        hass.data[DOMAIN].pop(entry.entry_id, None)
     return unload_ok

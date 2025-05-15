@@ -75,8 +75,23 @@ class OptoApi:
 
         async with session.get(url, data=None, headers=headers) as resp:
             login_result = await resp.json(content_type=None)
-        device_id = login_result["result"][0]["id"] 
-        _LOGGER.debug("async_get_device_list device_id:%s",device_id)
+            
+        _LOGGER.debug("async_get_device_list login_result:%s",login_result)
+        
+# Uncomment below to test the 2 device case 
+#        device_list_test= login_result["result"]
+#        _LOGGER.debug("Actual device list:%s",device_list_test) 
+#        test_device_list = []
+#        device0 = device_list_test[0]
+#        _LOGGER.debug("Device0:%s",device0) 
+#        test_device_list.append(device0)
+#        device1 = {'id': '12345', 'sn_num': 'Q7JL226KAAAAB0595', 'alexa_alias': 'my_room', 'device_model': 'UHZ99'}
+#        _LOGGER.debug("Device1:%s",device1) 
+#        test_device_list.append(device1)                    
+#        _LOGGER.debug("Modified test_device_list:%s",test_device_list)    
+#        device_list = test_device_list
+        
+        
         device_list = login_result["result"]
         return device_list    
         
