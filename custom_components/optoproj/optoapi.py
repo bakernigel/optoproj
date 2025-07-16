@@ -139,7 +139,37 @@ class OptoApi:
             result = await resp.json(content_type=None)
         _LOGGER.debug("async_send_turn_off result:%s", result)    
             
+    async def async_send_input_select(self, device_id, input) -> None:  
+        _LOGGER.debug("send_input_select:%s", input)
+        session = self.session 
+        
 
+        if input == 'HDMI1':
+            com_value = "1"
+        elif input == 'HDMI2':
+            com_value = "2"
+        elif input == 'HDMI3':
+            com_value = "3"
+        else:
+            _LOGGER.error("Invalid input: %s", input) 
+    
+        url = "https://omw.optoma.com/device/run_task"
+
+        headers = {
+          "accept": "*/*",
+          "content-type": "application/json",
+          "authorization": "Bearer "+self.access_token,
+        }
+        payload = {
+            "com_value" : com_value,
+            "job_type" : "1",
+            "device_id" : device_id,
+            "com_id" : "48"
+        }    
+        
+        async with session.post(url, json=payload, headers=headers) as resp:
+            result = await resp.json(content_type=None)
+        _LOGGER.debug("async_send_input_select result:%s", result)    
 
     def _get_headers(self, customer_uuid: Optional[str] = None) -> dict[str, str]:
         headers = {"User-Agent": "Optoma%20InfoWall/48 CFNetwork/3826.500.111.2.2 Darwin/24.4.0"}
@@ -147,5 +177,6 @@ class OptoApi:
             headers["authorization"] = f"Bearer {self.access_token}"
 
         return headers
+        
 
 

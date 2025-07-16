@@ -18,7 +18,7 @@ from .optoapi import OptoApi
 
 _LOGGER = logging.getLogger(__name__)
 
-PLATFORMS: list[Platform] = [Platform.REMOTE]
+PLATFORMS: list[Platform] = [Platform.REMOTE, Platform.SELECT]
 
 @dataclass
 class OptoProjData:

@@ -2,7 +2,7 @@
   "domain": "optoproj",
   "name": "Optoma Projector",
   "config_flow": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "requirements": [],
   "documentation": "https://github.com/bakernigel/optoproj",
   "issue_tracker": "https://github.com/bakernigel/optoproj/issues",
