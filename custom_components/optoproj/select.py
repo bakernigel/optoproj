@@ -51,7 +51,9 @@ class OptoProjSelectEntity(SelectEntity):
         "HDMI1",
         "HDMI2",
         "HDMI3"
-    ]        
+    ]
+    
+    _attr_current_option = None
 
     @property
     def device_info(self) -> DeviceInfo:
@@ -65,8 +67,14 @@ class OptoProjSelectEntity(SelectEntity):
         )
         
     async def async_select_option(self, option: str) -> None:
-        """Change the selected option.""" 
-    
-        _LOGGER.debug("Change the selected option: %s", option) 
-                
-        await self._api.async_send_input_select(self._device_id, option)               
+        """Change the selected option."""
+        _LOGGER.debug("Changing the selected option to: %s", option)
+        
+        # Send the command to the device via the API
+        await self._api.async_send_input_select(self._device_id, option)
+        
+        # Update the current option
+        self._attr_current_option = option
+        
+        # Notify Home Assistant of the state change
+        self.async_write_ha_state()
