@@ -73,8 +73,11 @@ class OptoProjSelectEntity(SelectEntity):
         # Send the command to the device via the API
         await self._api.async_send_input_select(self._device_id, option)
         
+        
+# Don't save the option or state because we've no way of knowing whether the command actually worked.
+# This gives the user the ability to select the same input again if the command does not work.
         # Update the current option
-        self._attr_current_option = option
+#        self._attr_current_option = option
         
         # Notify Home Assistant of the state change
-        self.async_write_ha_state()
+#        self.async_write_ha_state()
